@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITMOB | Workout Plans</title>
+    <script>
+        if (!localStorage.getItem('fitmob_user')) {
+            window.location.href = 'index.html?login=true';
+        }
+    </script>
+    <meta name="description" content="Find the perfect workout plan for your fitness level.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=8">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .plans-page {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        /* Header Section */
+        .plans-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 0.8s ease;
+            position: relative;
+            padding: 3rem 0;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        }
+
+        .plans-header h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .plans-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .section-title i {
+            color: var(--accent-neon);
+        }
+
+        /* Workout Plans Cards */
+        .plan-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-neon);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .plan-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .plan-card.active-plan {
+            border-color: var(--accent-neon);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .plan-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .plan-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .plan-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .meta-item i {
+            color: var(--accent-neon);
+        }
+
+        .plan-exercises {
+            flex-grow: 1;
+            margin-bottom: 2rem;
+        }
+
+        .plan-exercises h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exercise-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .exercise-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-neon);
+        }
+
+        /* Weekly Schedule Grid */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-bottom: 5rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .schedule-day {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .schedule-day:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .day-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .day-focus {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+        }
+
+        /* Focus Colors */
+        .focus-strength { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .focus-cardio { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .focus-rest { background: rgba(156, 163, 175, 0.1); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.3); }
+        .focus-flexibility { background: rgba(168, 85, 247, 0.1); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        .day-icon {
+            font-size: 1.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Detailed Breakdown Section */
+        .breakdown-section {
+            display: none; /* Hidden by default, shown via JS */
+            margin-bottom: 5rem;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .breakdown-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .breakdown-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .breakdown-icon {
+            font-size: 2rem;
+            color: var(--accent-neon);
+        }
+        .breakdown-title {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .breakdown-exercises {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .breakdown-exercises li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+        .breakdown-exercises li:last-child {
+            border-bottom: none;
+        }
+        .exercise-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .exercise-reps {
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.6rem;
+            border-radius: 5px;
+        }
+        .exercise-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .yt-link {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        .yt-link:hover {
+            color: #ff0000;
+            transform: scale(1.1);
+        }
+
+        /* Diet Section */
+        .diet-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .diet-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .diet-icon {
+            font-size: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .diet-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .diet-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            margin-bottom: 5rem;
+        }
+        .testimonial-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .test-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent-neon);
+        }
+        .test-stars {
+            color: #fbbf24;
+            font-size: 0.9rem;
+        }
+        .test-text {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* How it works steps */
+        .how-it-works {
+            margin-bottom: 5rem;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-neon);
+            color: var(--bg-dark);
+            font-size: 1.8rem;
+            font-weight: 800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+        .step-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .faq-question:hover {
+            color: var(--accent-neon);
+        }
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            color: var(--text-secondary);
+        }
+        .faq-answer.open {
+            max-height: 200px;
+            padding-bottom: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .schedule-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body class="plans-page">
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">FIT<span>MOB</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mentor.html">Mentor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tools.html">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="plans.html">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Contact</a></li>
+                    <li class="nav-item ms-lg-3"><button id="nav-signin-btn" class="btn btn-secondary btn-sm rounded-pill px-4 py-2 mt-2 mt-lg-0">Sign In</button></li>
+                    <li class="nav-item ms-lg-2" id="nav-profile-item" style="display: none;">
+                        <a href="profile.html" class="nav-link fs-4" title="My Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5 mt-4">
+        <!-- Header -->
+        <header class="plans-header">
+            <h1>Your Fitness <span class="highlight">Roadmap</span></h1>
+            <p>Consistency is the ultimate key to success. Pick a plan that fits your level and start building healthy habits today.</p>
+        </header>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works fade-in-up">
+            <h2 class="section-title text-center d-block w-100">How It Works</h2>
+            <div class="row g-4 mt-2">
+                <div class="col-md-4 step-card">
+                    <div class="step-number">1</div>
+                    <h3>Choose Your Plan</h3>
+                    <p>Select a workout plan that matches your current fitness level and schedule.</p>
+                </div>
+                <div class="col-md-4 step-card">
+                    <div class="step-number">2</div>
+                    <h3>Train Consistently</h3>
+                    <p>Follow the dynamically generated weekly schedule. Rest when needed.</p>
+                </div>
+                <div class="col-md-4 step-card">
+                    <div class="step-number">3</div>
+                    <h3>Track & Grow</h3>
+                    <p>Log your progress on the Dashboard to see your weekly review numbers go up.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workout Plans Section -->
+        <section class="workout-plans mb-5">
+            <h2 class="section-title"><i class="fas fa-dumbbell"></i> Workout Programs</h2>
+            
+            <div class="row g-4">
+                <!-- Beginner Plan -->
+                <div class="col-lg-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-title">Beginner Base</h3>
+                            <p class="plan-desc">Perfect for those just starting out. Focuses on building core strength, mobility, and fundamental movement patterns.</p>
+                        </div>
+                        <div class="plan-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> 3 Days/Week</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> Easy</div>
+                        </div>
+                        <div class="plan-exercises">
+                            <h4>Core Exercises</h4>
+                            <ul class="exercise-list">
+                                <li>Bodyweight Squats (3x12)</li>
+                                <li>Knee Push-ups (3x10)</li>
+                                <li>Dumbbell Rows (3x12)</li>
+                                <li>Plank (3x30 sec)</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-secondary w-100 start-plan-btn mt-auto" data-plan="beginner">Start Plan</button>
+                    </div>
+                </div>
+
+                <!-- Intermediate Plan -->
+                <div class="col-lg-4">
+                    <div class="plan-card" style="border-color: rgba(99, 102, 241, 0.4); transform: scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div class="plan-header">
+                            <h3 class="plan-title highlight">Intermediate Build</h3>
+                            <p class="plan-desc">For those with basic experience looking to pack on muscle and increase endurance. A solid split routine.</p>
+                        </div>
+                        <div class="plan-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> 4 Days/Week</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> Medium</div>
+                        </div>
+                        <div class="plan-exercises">
+                            <h4>Core Exercises</h4>
+                            <ul class="exercise-list">
+                                <li>Barbell Squats (4x10)</li>
+                                <li>Bench Press (4x8)</li>
+                                <li>Pull-ups (3xMax)</li>
+                                <li>Overhead Press (3x10)</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-primary w-100 start-plan-btn mt-auto" data-plan="intermediate">Start Plan</button>
+                    </div>
+                </div>
+
+                <!-- Advanced Plan -->
+                <div class="col-lg-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-title">Advanced Shred</h3>
+                            <p class="plan-desc">High intensity, heavy weights, and advanced training techniques to push past plateaus and maximize results.</p>
+                        </div>
+                        <div class="plan-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> 6 Days/Week</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> Hard</div>
+                        </div>
+                        <div class="plan-exercises">
+                            <h4>Core Exercises</h4>
+                            <ul class="exercise-list">
+                                <li>Deadlifts (5x5)</li>
+                                <li>Weighted Dips (4x8)</li>
+                                <li>Bulgarian Split Squats (4x10)</li>
+                                <li>HIIT Sprints (20 mins)</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-secondary w-100 start-plan-btn mt-auto" data-plan="advanced">Start Plan</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weekly Schedule Section -->
+        <section class="schedule-section">
+            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Weekly Routine Example</h2>
+            <div class="schedule-grid" id="schedule-grid">
+                <div class="schedule-day">
+                    <div class="day-name">Mon</div>
+                    <span class="day-focus focus-strength">Strength</span>
+                    <div class="day-icon"><i class="fas fa-dumbbell" style="color: #ef4444;"></i></div>
+                </div>
+                <div class="schedule-day">
+                    <div class="day-name">Tue</div>
+                    <span class="day-focus focus-cardio">Cardio</span>
+                    <div class="day-icon"><i class="fas fa-running" style="color: #38bdf8;"></i></div>
+                </div>
+                <div class="schedule-day">
+                    <div class="day-name">Wed</div>
+                    <span class="day-focus focus-strength">Strength</span>
+                    <div class="day-icon"><i class="fas fa-dumbbell" style="color: #ef4444;"></i></div>
+                </div>
+                <div class="schedule-day">
+                    <div class="day-name">Thu</div>
+                    <span class="day-focus focus-rest">Rest</span>
+                    <div class="day-icon"><i class="fas fa-bed" style="color: #9ca3af;"></i></div>
+                </div>
+                <div class="schedule-day">
+                    <div class="day-name">Fri</div>
+                    <span class="day-focus focus-strength">Strength</span>
+                    <div class="day-icon"><i class="fas fa-dumbbell" style="color: #ef4444;"></i></div>
+                </div>
+                <div class="schedule-day">
+                    <div class="day-name">Sat</div>
+                    <span class="day-focus focus-flexibility">Mobility</span>
+                    <div class="day-icon"><i class="fas fa-child-reaching" style="color: #a855f7;"></i></div>
+                </div>
+                <div class="schedule-day">
+                    <div class="day-name">Sun</div>
+                    <span class="day-focus focus-rest">Rest</span>
+                    <div class="day-icon"><i class="fas fa-bed" style="color: #9ca3af;"></i></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Breakdown Section -->
+        <section class="breakdown-section" id="breakdown-section">
+            <h2 class="section-title"><i class="fas fa-list-check"></i> Detailed Workout Breakdown</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; text-align: center;">Here is exactly what you need to do at the gym for your selected plan.</p>
+            <div class="breakdown-grid" id="breakdown-grid">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </section>
+
+        <!-- Diet & Nutrition Tips -->
+        <section class="diet-section mb-5">
+            <h2 class="section-title"><i class="fas fa-apple-whole"></i> Fuel Your Body</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="diet-card h-100">
+                        <div class="diet-icon">🍗</div>
+                        <div class="diet-content">
+                            <h3>Protein Power</h3>
+                            <p>Incorporate lean meats, tofu, beans, and eggs into your meals to aid muscle recovery and growth.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="diet-card h-100">
+                        <div class="diet-icon">💧</div>
+                        <div class="diet-content">
+                            <h3>Stay Hydrated</h3>
+                            <p>Drink water before, during, and after your workouts. Aim for at least 2-3 liters a day.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="diet-card h-100">
+                        <div class="diet-icon">🥗</div>
+                        <div class="diet-content">
+                            <h3>Complex Carbs</h3>
+                            <p>Oats, sweet potatoes, and brown rice provide sustained energy for intense training sessions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="diet-card h-100">
+                        <div class="diet-icon">🥑</div>
+                        <div class="diet-content">
+                            <h3>Healthy Fats</h3>
+                            <p>Don't fear fats! Avocados, nuts, and olive oil are crucial for hormone balance and joint health.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <h2 class="section-title"><i class="fas fa-star"></i> Success Stories</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="test-header">
+                            <div class="test-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4 style="margin-bottom: 0;">Sarah J.</h4>
+                                <div class="test-stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <p class="test-text">"The Beginner Base plan completely changed my relationship with fitness. It wasn't overwhelming, and the dynamic schedule kept me on track every single week."</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="test-header">
+                            <div class="test-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4 style="margin-bottom: 0;">Marcus T.</h4>
+                                <div class="test-stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <p class="test-text">"I jumped into the Intermediate Build. The structured upper/lower split is exactly what I needed to break through my plateau. Highly recommend!"</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="test-header">
+                            <div class="test-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4 style="margin-bottom: 0;">David L.</h4>
+                                <div class="test-stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <p class="test-text">"The Advanced Shred is brutal but amazing. Having the routine visually laid out in the dashboard makes tracking my intense 6-day split effortless."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Motivation Section -->
+        <section class="motivation-section position-relative my-5 p-5 rounded-4 border border-secondary" style="background: rgba(255,255,255,0.02); overflow: hidden;">
+            <div class="position-relative z-1 d-flex flex-column flex-md-row align-items-center gap-5">
+                <div class="flex-grow-1">
+                    <h3 class="fs-2 mb-3">"The hardest lift of all is lifting your butt off the couch."</h3>
+                    <p class="text-secondary fs-5">Start small, stay consistent, and watch the results compound over time. You are capable of more than you know.</p>
+                </div>
+                <div class="bg-dark p-4 rounded-4 text-center border border-secondary" style="min-width: 250px;">
+                    <div class="fs-1 text-warning mb-2"><i class="fas fa-trophy"></i></div>
+                    <h4>Set Your Goal</h4>
+                    <p class="text-secondary small mb-0">Track progress to unlock achievements.</p>
+                </div>
+            </div>
+            <i class="fas fa-bolt" style="position: absolute; right: -2rem; bottom: -2rem; font-size: 15rem; color: rgba(99, 102, 241, 0.05); z-index: 0;"></i>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section mb-5">
+            <h2 class="section-title text-center d-block w-100">Frequently Asked Questions</h2>
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-8">
+                    <div class="faq-item">
+                        <div class="faq-question">What if I miss a workout day? <i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p style="padding-top: 1rem;">No stress! Consistency is about the big picture. Simply pick up where you left off the next day. You can easily adjust your weekly review on the dashboard.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Do I need a gym membership? <i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p style="padding-top: 1rem;">The Beginner Base plan can be done entirely at home with minimal equipment. The Intermediate and Advanced plans are best performed in a gym setting with access to barbells and machines.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How do I switch plans? <i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p style="padding-top: 1rem;">Simply click 'Start Plan' on a different card. Your weekly schedule will automatically update to reflect the new training split.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Workout Timer Modal -->
+    <div id="workout-timer-modal" class="modal" style="z-index: 1050;">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-timer-btn close-btn">&times;</span>
+            <div class="text-center">
+                <h2 class="mb-2">Active <span class="highlight">Workout</span></h2>
+                <p id="active-plan-title" class="text-secondary mb-4">No plan selected</p>
+                
+                <div class="timer-display mb-4">
+                    <div id="workout-time" class="display-1 fw-bold text-light" style="font-variant-numeric: tabular-nums;">00:00</div>
+                    <p class="text-secondary mt-2">Time Elapsed</p>
+                </div>
+
+                <div class="timer-controls d-flex justify-content-center gap-3 mb-4">
+                    <button id="btn-timer-start" class="btn btn-success px-4"><i class="fas fa-play me-2"></i>Start</button>
+                    <button id="btn-timer-pause" class="btn btn-warning px-4" style="display:none;"><i class="fas fa-pause me-2"></i>Pause</button>
+                    <button id="btn-timer-stop" class="btn btn-danger px-4" style="display:none;"><i class="fas fa-stop me-2"></i>Stop</button>
+                </div>
+
+                <div class="exercise-checklist text-start bg-dark rounded p-3 mb-4" style="border: 1px solid rgba(255,255,255,0.05); max-height: 200px; overflow-y: auto;">
+                    <h5 class="text-light mb-3">Today's Exercises:</h5>
+                    <ul id="active-exercise-list" class="list-unstyled mb-0">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <button id="btn-finish-workout" class="btn btn-primary w-100 py-3 fw-bold fs-5" disabled>
+                    Complete Workout (+50 XP)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div id="signin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Welcome to FIT<span class="highlight">MOB</span></h2>
+            <p id="modal-subtitle">Sign in to access your personal dashboard.</p>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="mb-3">
+                    <input type="text" id="auth-username" class="form-control" placeholder="Username" required minlength="3">
+                </div>
+                <div class="mb-3">
+                    <input type="password" id="auth-password" class="form-control" placeholder="Password" required minlength="4">
+                </div>
+                <p id="auth-error" class="auth-error text-danger"></p>
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary w-100">Sign In</button>
+            </form>
+            
+            <div class="form-toggle text-center mt-3">
+                <span id="form-toggle-text" class="text-secondary">Don't have an account? <a href="#" id="toggle-auth-link" class="highlight">Create one</a></span>
+            </div>
+
+            <div class="modal-divider my-3"><span>OR</span></div>
+            <button id="btn-guest" class="btn btn-secondary w-100">
+                <i class="fas fa-user-astronaut me-2"></i> Continue as Guest
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 border-top border-secondary">
+        <div class="container footer-content text-center py-4">
+            <div class="footer-logo fs-4 fw-bold">FIT<span class="text-primary">MOB</span></div>
+            <p class="text-secondary mt-2">&copy; 2026 FITMOB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js?v=4"></script>
+    <script src="plans.js?v=4"></script>
+</body>
+</html>

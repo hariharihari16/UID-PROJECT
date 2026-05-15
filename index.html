@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITMOB | Your Personal Fitness Journey</title>
+    <meta name="description" content="Track your fitness, calculate BMI, and build healthy habits with FITMOB.">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css?v=5">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">FIT<span>MOB</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link dashboard-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mentor.html">Mentor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tools.html">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="plans.html">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Contact</a></li>
+                    <li class="nav-item ms-lg-3"><button id="nav-signin-btn" class="btn btn-secondary btn-sm rounded-pill px-4 py-2 mt-2 mt-lg-0">Sign In</button></li>
+                    <li class="nav-item ms-lg-2" id="nav-profile-item" style="display: none;">
+                        <a href="profile.html" class="nav-link fs-4" title="My Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="fit.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content container">
+            <h1 class="fade-in-up">FITMOB <br><span class="highlight">– Your Personal Fitness Journey</span></h1>
+            <p class="fade-in-up delay-1">Track your progress, build healthy habits, and transform your life with our comprehensive fitness tools.</p>
+            <div class="hero-buttons fade-in-up delay-2">
+                <a href="dashboard.html" class="btn btn-primary dashboard-link">Go to Dashboard</a>
+                <a href="tools.html" class="btn btn-secondary">Explore Tools</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section (Using Bootstrap Grid) -->
+    <section class="stats-banner fade-in delay-3">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-6 col-md-3">
+                    <h3 class="stat-number">300+</h3>
+                    <p class="stat-label">Active Users</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="stat-number">50+</h3>
+                    <p class="stat-label">Workout Plans</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="stat-number">10k+</h3>
+                    <p class="stat-label">Habits Tracked</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="stat-number">24/7</h3>
+                    <p class="stat-label">Progress Sync</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section (Using Bootstrap Grid) -->
+    <section class="why-choose-us">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 why-content fade-in-up">
+                    <h2>Why Choose <span class="highlight">FITMOB?</span></h2>
+                    <p>We built FITMOB to cut through the noise. No more confusing spreadsheets or scattered apps. Everything you need to transform your body and mind is integrated into one seamless, dark-themed experience.</p>
+                    
+                    <ul class="benefit-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Automated Habit Tracking</h4>
+                                <p>Our smart calendar automatically resets your weekly goals, keeping you focused on the present.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-layer-group"></i>
+                            <div>
+                                <h4>Dynamic Exercise Generation</h4>
+                                <p>Select a plan and instantly get a detailed breakdown of exercises, sets, and video tutorials.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-chart-pie"></i>
+                            <div>
+                                <h4>Data-Driven Growth</h4>
+                                <p>Watch your progress bars fill up on your personalized dashboard as you crush your weekly targets.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 why-visual fade-in-up delay-1">
+                    <div class="video-container position-relative rounded-4 overflow-hidden" style="box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <video autoplay muted loop playsinline style="width: 100%; display: block; object-fit: cover; border-radius: inherit; min-height: 400px;">
+                            <source src="gay.mp4" type="video/mp4">
+                        </video>
+                        <!-- Gradient Overlay -->
+                        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, rgba(10, 10, 10, 0.1) 50%, rgba(10, 10, 10, 0.9) 100%); pointer-events: none;"></div>
+                        <!-- Overlay Content -->
+                        <div class="position-absolute bottom-0 start-0 p-4 z-2">
+                            <i class="fas fa-bolt" style="font-size: 2.5rem; color: var(--accent-neon); margin-bottom: 0.5rem;"></i>
+                            <h3 class="text-white" style="font-size: 1.8rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Build Unbreakable Consistency</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section (Using Bootstrap Grid and Cards) -->
+    <section id="tools" class="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Our Core <span class="highlight">Tools</span></h2>
+                <p>Everything you need to reach your fitness goals in one place.</p>
+            </div>
+            <div class="row g-4">
+                <!-- Feature Card 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 fade-in-up border-0">
+                        <div class="card-body d-flex flex-column">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <h3>Habit Tracking</h3>
+                            <p class="flex-grow-1 text-secondary">Build consistency by tracking your daily workouts, water intake, and healthy meals.</p>
+                            <a href="#" class="card-link mt-auto">Start Tracking <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature Card 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 fade-in-up delay-1 border-0">
+                        <div class="card-body d-flex flex-column">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-weight-scale"></i>
+                            </div>
+                            <h3>BMI Calculator</h3>
+                            <p class="flex-grow-1 text-secondary">Quickly determine your Body Mass Index to set realistic weight goals.</p>
+                            <a href="#" class="card-link mt-auto">Calculate BMI <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature Card 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 fade-in-up delay-2 border-0">
+                        <div class="card-body d-flex flex-column">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-dumbbell"></i>
+                            </div>
+                            <h3>Workout Plans</h3>
+                            <p class="flex-grow-1 text-secondary">Access customized workout routines tailored to your specific fitness level.</p>
+                            <a href="#" class="card-link mt-auto">View Plans <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature Card 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card card h-100 fade-in-up delay-3 border-0">
+                        <div class="card-body d-flex flex-column">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-fire-burner"></i>
+                            </div>
+                            <h3>Calorie Calculator</h3>
+                            <p class="flex-grow-1 text-secondary">Track your daily caloric intake and expenditure to manage your diet effectively.</p>
+                            <a href="#" class="card-link mt-auto">Track Calories <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Banner -->
+    <section class="cta-banner fade-in">
+        <div class="container cta-content">
+            <h2>Ready to transform your life?</h2>
+            <p>Join over 300 users who are already crushing their goals with FITMOB.</p>
+            <a href="dashboard.html" class="btn btn-primary dashboard-link px-5 py-3 fs-5 mt-3">Launch Dashboard</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">FIT<span>MOB</span></div>
+            <p>&copy; 2026 FITMOB. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sign In Modal -->
+    <div id="signin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Welcome to FIT<span class="highlight">MOB</span></h2>
+            <p id="modal-subtitle">Sign in to access your personal dashboard.</p>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="mb-3">
+                    <input type="text" id="auth-username" class="form-control" placeholder="Username" required minlength="3">
+                </div>
+                <div class="mb-3">
+                    <input type="password" id="auth-password" class="form-control" placeholder="Password" required minlength="4">
+                </div>
+                <p id="auth-error" class="auth-error"></p>
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary w-100">Sign In</button>
+            </form>
+            
+            <div class="form-toggle text-center mt-3">
+                <span id="form-toggle-text" class="text-secondary">Don't have an account? <a href="#" id="toggle-auth-link" class="highlight">Create one</a></span>
+            </div>
+
+            <div class="modal-divider my-3"><span>OR</span></div>
+            <button id="btn-guest" class="btn btn-secondary w-100">
+                <i class="fas fa-user-astronaut me-2"></i> Continue as Guest
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js?v=4"></script>
+</body>
+</html>

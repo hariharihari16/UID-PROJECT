@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITMOB | Health Tools & Calculators</title>
+    <meta name="description" content="Calculate your BMI, estimate daily calories, and get health tips on FITMOB.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=7">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Specific Tools Page Styles to complement styles.css */
+        .tools-page {
+            padding-top: 100px; /* Offset for navbar */
+            min-height: 100vh;
+        }
+
+        .gender-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .gender-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            padding: 0.8rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .gender-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .gender-btn.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--accent-neon);
+            color: var(--accent-neon);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0.5rem 0;
+            text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .result-category {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* BMI Colors */
+        .cat-underweight { color: #3b82f6; }
+        .cat-normal { color: #22c55e; text-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
+        .cat-overweight { color: #f59e0b; }
+        .cat-obese { color: #ef4444; }
+
+        .tips-list {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .tips-list h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .tips-list ul {
+            padding-left: 0;
+        }
+
+        .tips-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .tips-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-neon);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="tools-page">
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">FIT<span>MOB</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="tools.html">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="plans.html">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Contact</a></li>
+                    <li class="nav-item ms-lg-3"><button id="nav-signin-btn" class="btn btn-secondary btn-sm rounded-pill px-4 py-2 mt-2 mt-lg-0">Sign In</button></li>
+                    <li class="nav-item ms-lg-2" id="nav-profile-item" style="display: none;">
+                        <a href="profile.html" class="nav-link fs-4" title="My Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5 mt-4">
+        <header class="text-center mb-5 fade-in-up">
+            <h1 class="fw-bold mb-3 fs-1 mt-4">Fitness Tools & <span class="highlight">Calculators</span></h1>
+            <p class="text-secondary fs-5">Calculate your core health metrics to set accurate, data-driven goals.</p>
+        </header>
+
+        <div class="row g-4 mb-5">
+            <!-- BMI Calculator -->
+            <div class="col-lg-6">
+                <section class="card calculator-card fade-in-up p-4 border-0 h-100" style="animation-delay: 0.1s;">
+                    <h2 class="fs-4 mb-4"><i class="fas fa-weight-scale text-primary me-2"></i> BMI Calculator</h2>
+                    
+                    <form id="bmi-form">
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label" for="bmi-height">Height (cm)</label>
+                                <input type="number" id="bmi-height" class="form-control" placeholder="175" required min="50" max="300">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="bmi-weight">Weight (kg)</label>
+                                <input type="number" id="bmi-weight" class="form-control" placeholder="70" required min="20" max="400">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Calculate BMI</button>
+                    </form>
+
+                    <!-- BMI Result -->
+                    <div id="bmi-result-box" class="result-box mt-4">
+                        <p class="mb-1 text-secondary">Your Body Mass Index</p>
+                        <div id="bmi-value" class="result-value">--</div>
+                        <div id="bmi-category" class="result-category">Waiting for input...</div>
+                    </div>
+
+                    <!-- BMI Info -->
+                    <div class="tips-list mt-4">
+                        <h4 class="text-light">What does this mean?</h4>
+                        <ul class="text-secondary small">
+                            <li><strong>Under 18.5:</strong> Underweight. Focus on a caloric surplus and strength training.</li>
+                            <li><strong>18.5 - 24.9:</strong> Normal weight. Maintain with balanced diet and regular exercise.</li>
+                            <li><strong>25.0 - 29.9:</strong> Overweight. Consider a slight caloric deficit.</li>
+                            <li><strong>30.0+:</strong> Obese. Consult a healthcare provider for a structured plan.</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Calorie Calculator -->
+            <div class="col-lg-6">
+                <section class="card calculator-card fade-in-up p-4 border-0 h-100" style="animation-delay: 0.2s;">
+                    <h2 class="fs-4 mb-4"><i class="fas fa-fire-burner text-warning me-2"></i> Calorie Needs</h2>
+                    
+                    <form id="calorie-form">
+                        <label class="form-label">Biological Sex</label>
+                        <div class="gender-toggle">
+                            <button type="button" class="gender-btn active" data-gender="male">Male</button>
+                            <button type="button" class="gender-btn" data-gender="female">Female</button>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-4">
+                                <label class="form-label" for="cal-age">Age</label>
+                                <input type="number" id="cal-age" class="form-control" placeholder="25" required min="15" max="100">
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label" for="cal-height">Ht (cm)</label>
+                                <input type="number" id="cal-height" class="form-control" placeholder="175" required min="100" max="250">
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label" for="cal-weight">Wt (kg)</label>
+                                <input type="number" id="cal-weight" class="form-control" placeholder="70" required min="30" max="250">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="cal-activity">Activity Level</label>
+                            <select id="cal-activity" class="form-select bg-dark text-light border-secondary">
+                                <option value="1.2">Sedentary (Little/no exercise)</option>
+                                <option value="1.375">Light Active (1-3 days/week)</option>
+                                <option value="1.55" selected>Moderately Active (3-5 days/week)</option>
+                                <option value="1.725">Very Active (6-7 days/week)</option>
+                                <option value="1.9">Extra Active (Physical job + training)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-2">Calculate Maintenance</button>
+                    </form>
+
+                    <!-- Calorie Result -->
+                    <div id="cal-result-box" class="result-box mt-4">
+                        <p class="mb-1 text-secondary">Maintenance Calories (TDEE)</p>
+                        <div id="cal-value" class="result-value" style="color: var(--accent-neon);">--</div>
+                        <p class="small text-secondary mb-0">calories / day</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Info Alert -->
+        <div class="alert alert-dark text-center py-4 fade-in border-secondary text-secondary rounded-4 shadow-sm mx-auto" style="max-width: 800px; background: rgba(255,255,255,0.02);">
+            <i class="fas fa-info-circle text-primary fs-4 mb-2 d-block"></i>
+            <strong>Disclaimer:</strong> These calculators provide estimates based on standard formulas (Mifflin-St Jeor). Individual metabolisms vary. Consult a professional for highly accurate metabolic testing.
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-5 border-top border-secondary">
+        <div class="container footer-content text-center py-4">
+            <div class="footer-logo fs-4 fw-bold">FIT<span class="text-primary">MOB</span></div>
+            <p class="text-secondary mt-2">&copy; 2026 FITMOB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Sign In Modal -->
+    <div id="signin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Welcome to FIT<span class="highlight">MOB</span></h2>
+            <p id="modal-subtitle">Sign in to access your personal dashboard.</p>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="mb-3">
+                    <input type="text" id="auth-username" class="form-control" placeholder="Username" required minlength="3">
+                </div>
+                <div class="mb-3">
+                    <input type="password" id="auth-password" class="form-control" placeholder="Password" required minlength="4">
+                </div>
+                <p id="auth-error" class="auth-error text-danger"></p>
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary w-100">Sign In</button>
+            </form>
+            
+            <div class="form-toggle text-center mt-3">
+                <span id="form-toggle-text" class="text-secondary">Don't have an account? <a href="#" id="toggle-auth-link" class="highlight">Create one</a></span>
+            </div>
+
+            <div class="modal-divider my-3"><span>OR</span></div>
+            <button id="btn-guest" class="btn btn-secondary w-100">
+                <i class="fas fa-user-astronaut me-2"></i> Continue as Guest
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js?v=4"></script>
+    <script src="tools.js?v=6"></script>
+</body>
+</html>

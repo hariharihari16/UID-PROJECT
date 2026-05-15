@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITMOB | AI Mentor</title>
+    <script>
+        if (!localStorage.getItem('fitmob_user')) {
+            window.location.href = 'index.html?login=true';
+        }
+    </script>
+    <meta name="description" content="Your personal AI Fitness Mentor analyzing your data.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=10">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .mentor-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mentor-container {
+            max-width: 800px;
+            margin: 0 auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .mentor-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--accent-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: var(--accent-neon);
+            margin: 0 auto 2rem;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+            transition: all 0.5s ease;
+        }
+
+        .mentor-avatar.analyzing {
+            animation: pulse-avatar 1.5s infinite;
+        }
+
+        @keyframes pulse-avatar {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); transform: scale(0.95); }
+            70% { box-shadow: 0 0 0 30px rgba(99, 102, 241, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); transform: scale(0.95); }
+        }
+
+        .mentor-box {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .mentor-box::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 15px 15px 15px;
+            border-style: solid;
+            border-color: transparent transparent rgba(20, 20, 20, 0.8) transparent;
+        }
+
+        .mentor-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            min-height: 150px;
+        }
+
+        .mentor-content p {
+            margin-bottom: 1rem;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.2rem;
+            background-color: var(--accent-neon);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="mentor-page">
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">FIT<span>MOB</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="mentor.html">Mentor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tools.html">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="plans.html">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item ms-lg-3"><button id="nav-signin-btn" class="btn btn-secondary btn-sm rounded-pill px-4 py-2 mt-2 mt-lg-0">Sign In</button></li>
+                    <li class="nav-item ms-lg-2" id="nav-profile-item" style="display: none;">
+                        <a href="profile.html" class="nav-link fs-4" title="My Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5 mt-5 mentor-container">
+        <div class="text-center mb-4 fade-in-up">
+            <h1 class="fw-bold mb-2">AI <span class="highlight">Mentor</span></h1>
+            <p class="text-secondary">Your personalized data-driven fitness coach.</p>
+        </div>
+
+        <div class="mentor-avatar fade-in-up" id="mentor-avatar" style="animation-delay: 0.1s;">
+            <i class="fas fa-robot"></i>
+        </div>
+
+        <div class="text-center mb-4 fade-in-up" style="animation-delay: 0.2s;">
+            <button id="btn-analyze" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                <i class="fas fa-search-chart me-2"></i> Analyze My Progress
+            </button>
+        </div>
+
+        <div class="mentor-box fade-in-up shadow-lg" style="animation-delay: 0.3s; display: none;" id="mentor-box">
+            <div id="mentor-content" class="mentor-content">
+                <!-- Text injected via JS -->
+            </div>
+            <span class="cursor" id="typing-cursor" style="display: none;"></span>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-top border-secondary">
+        <div class="container footer-content text-center py-4">
+            <div class="footer-logo fs-4 fw-bold">FIT<span class="text-primary">MOB</span></div>
+            <p class="text-secondary mt-2">&copy; 2026 FITMOB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js?v=6"></script>
+    <script src="mentor.js?v=1"></script>
+</body>
+</html>

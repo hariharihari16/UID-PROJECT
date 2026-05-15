@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITMOB | About Us</title>
+    <meta name="description" content="Learn more about FITMOB, our mission, and the team behind the platform.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=6">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .about-page {
+            padding-top: 80px;
+        }
+
+        /* Hero Banner */
+        .about-hero {
+            position: relative;
+            padding: 8rem 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(99, 102, 241, 0.1));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Section Typography */
+        .section-header {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: var(--accent-neon);
+            border-radius: 2px;
+        }
+
+        /* Team Cards */
+        .team-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-neon);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--accent-neon);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Features/Vision Grid */
+        .vision-icon {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            /* Blue accent */
+            margin-bottom: 1.5rem;
+        }
+
+        .vision-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            height: 100%;
+            transition: var(--transition);
+        }
+
+        .vision-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            border-color: #38bdf8;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Motivational Banner */
+        .motivation-banner {
+            background: linear-gradient(90deg, rgba(10, 10, 10, 1) 0%, rgba(99, 102, 241, 0.2) 50%, rgba(10, 10, 10, 1) 100%);
+            padding: 5rem 0;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            text-align: center;
+        }
+
+        .motivation-banner h2 {
+            font-size: 3rem;
+            font-style: italic;
+            font-weight: 300;
+        }
+    </style>
+</head>
+
+<body class="about-page">
+
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">FIT<span>MOB</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mentor.html">Mentor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tools.html">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="plans.html">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Contact</a></li>
+                    <li class="nav-item ms-lg-3"><button id="nav-signin-btn"
+                            class="btn btn-secondary btn-sm rounded-pill px-4 py-2 mt-2 mt-lg-0">Sign In</button></li>
+                    <li class="nav-item ms-lg-2" id="nav-profile-item" style="display: none;">
+                        <a href="profile.html" class="nav-link fs-4" title="My Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. Hero/About Banner -->
+    <header class="about-hero">
+        <div class="container fade-in-up">
+            <h1>More Than Just <span class="highlight">Fitness</span></h1>
+            <p class="fs-4 text-secondary max-w-700 mx-auto" style="max-width: 800px;">
+                Discipline, consistency, and self-improvement built into a seamless digital experience. We are here to
+                help you unlock your highest potential.
+            </p>
+        </div>
+    </header>
+
+    <!-- 3. Our Mission Section -->
+    <section class="py-5 my-5">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8 fade-in-up" style="animation-delay: 0.2s;">
+                    <h2 class="section-header">Our Mission</h2>
+                    <p class="fs-5 text-secondary lh-lg mb-4">
+                        FITMOB was created to encourage healthier lifestyles by transforming fitness from a chore into
+                        an engaging, daily habit. We believe that tracking your progress shouldn't be overwhelming. Our
+                        ultimate goal is to make fitness tracking simple, interactive, and highly motivating—especially
+                        for beginners who are just starting their journey.
+                    </p>
+                    <i class="fas fa-bullseye fs-1 text-primary mt-3 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Why We Created FITMOB & 5. Design Philosophy -->
+    <section class="py-5 bg-black">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center">
+                <!-- Why We Created It -->
+                <div class="col-lg-6 fade-in-up" style="animation-delay: 0.3s;">
+                    <h2 class="fs-1 fw-bold mb-4">Why We Created FITMOB</h2>
+                    <div class="d-flex flex-column gap-4">
+                        <div class="d-flex gap-3">
+                            <i class="fas fa-times-circle fs-3 text-danger mt-1"></i>
+                            <div>
+                                <h4 class="fs-5 text-light">The Struggle for Consistency</h4>
+                                <p class="text-secondary">Many people struggle to stay consistent with fitness goals.
+                                    Motivation fades when results aren't immediately visible.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <i class="fas fa-project-diagram fs-3 text-danger mt-1"></i>
+                            <div>
+                                <h4 class="fs-5 text-light">Complicated Platforms</h4>
+                                <p class="text-secondary">Existing fitness platforms can feel bloated, complicated, and
+                                    intimidating for those who just want to get started.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <i class="fas fa-check-circle fs-3 text-success mt-1"></i>
+                            <div>
+                                <h4 class="fs-5 text-light">The Solution</h4>
+                                <p class="text-secondary">FITMOB strips away the noise. We focus strictly on simplicity,
+                                    pure motivation, and visual progress tracking to keep you in the zone.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Philosophy -->
+                <div class="col-lg-6 fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="card bg-dark border-0 rounded-4 p-5" style="box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                        <h2 class="fs-3 fw-bold mb-4 text-center"><i class="fas fa-palette highlight me-2"></i> Design
+                            Philosophy</h2>
+                        <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                            <li class="d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded"><i
+                                        class="fas fa-seedling text-primary"></i></div>
+                                <span class="fs-5 text-light">Beginner-friendly design</span>
+                            </li>
+                            <li class="d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded"><i
+                                        class="fas fa-mouse-pointer text-primary"></i></div>
+                                <span class="fs-5 text-light">Interactive and responsive dashboard</span>
+                            </li>
+                            <li class="d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded"><i
+                                        class="fas fa-moon text-primary"></i></div>
+                                <span class="fs-5 text-light">Clean dark-themed interface</span>
+                            </li>
+                            <li class="d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded"><i
+                                        class="fas fa-wind text-primary"></i></div>
+                                <span class="fs-5 text-light">Easy navigation & smooth user experience</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Future Vision Section -->
+    <section class="py-5 my-5">
+        <div class="container text-center">
+            <h2 class="section-header fade-in-up">Our Future Vision</h2>
+            <div class="row g-4 mt-4">
+                <div class="col-md-6 col-lg-3 fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="vision-card">
+                        <i class="fas fa-robot vision-icon"></i>
+                        <h4 class="text-light mb-3">AI Workouts</h4>
+                        <p class="text-secondary small">Smart AI-based workout suggestions that adapt to your progress
+                            and fatigue levels in real-time.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="vision-card">
+                        <i class="fas fa-magic vision-icon"></i>
+                        <h4 class="text-light mb-3">Personalization</h4>
+                        <p class="text-secondary small">Highly personalized fitness and nutrition recommendations based
+                            on your unique body metrics.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="vision-card">
+                        <i class="fas fa-plug vision-icon"></i>
+                        <h4 class="text-light mb-3">Real-time APIs</h4>
+                        <p class="text-secondary small">Integration with real-time fitness APIs to sync your data from
+                            smartwatches and wearables.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="vision-card">
+                        <i class="fas fa-cloud-upload-alt vision-icon"></i>
+                        <h4 class="text-light mb-3">Cloud Saves</h4>
+                        <p class="text-secondary small">A robust user login and progress saving system to keep your data
+                            secure across all devices.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Meet the Team Section -->
+    <section class="py-5 bg-black">
+        <div class="container py-5">
+            <div class="text-center mb-5 fade-in-up">
+                <h2 class="section-header">Meet the Team</h2>
+                <p class="text-secondary fs-5 max-w-700 mx-auto" style="max-width: 800px;">
+                    Both team members contributed almost equally to the design, development, and functionality of the
+                    project. Our shared responsibilities included UI design, dashboard development, JavaScript
+                    interactivity, responsive layouts, and overall project planning.
+                </p>
+            </div>
+
+            <div class="row justify-content-center g-5 mt-2">
+                <!-- Team Member 1 -->
+                <div class="col-md-6 col-lg-5 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <i class="fas fa-user-astronaut"></i>
+                        </div>
+                        <h3 class="fs-3 fw-bold text-light mb-2">Harimadhav R</h3>
+                        <p class="highlight fw-semibold mb-4">Co-Creator & Developer</p>
+                        <p class="text-secondary small lh-lg">Focused on architecting the core platform structure,
+                            bridging beautiful UI components with highly functional and responsive logic.</p>
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a href="https://github.com/hariharihari16" target="_blank" class="text-secondary fs-5"><i
+                                    class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/harimadhav-r-a22502301/" target="_blank"
+                                class="text-secondary fs-5"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="col-md-6 col-lg-5 fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <i class="fas fa-user-ninja"></i>
+                        </div>
+                        <h3 class="fs-3 fw-bold text-light mb-2">Neev Jomy</h3>
+                        <p class="highlight fw-semibold mb-4">Co-Creator & Developer</p>
+                        <p class="text-secondary small lh-lg">Specialized in fine-tuning the design aesthetics,
+                            perfecting dashboard interactivity, and ensuring the user experience feels absolutely
+                            premium.</p>
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a href="https://github.com/neevjomy" target="_blank" class="text-secondary fs-5"><i
+                                    class="fab fa-github"></i></a>
+                            <a href="https://linkedin.com/in/neevjomy" target="_blank" class="text-secondary fs-5"><i
+                                    class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Motivation Banner -->
+    <section class="motivation-banner fade-in-up">
+        <div class="container">
+            <h2>"Small daily improvements create <span class="highlight fw-bold" style="font-style: normal;">long-term
+                    success</span>."</h2>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 border-top border-secondary">
+        <div class="container text-center">
+            <div class="fs-4 fw-bold mb-3">FIT<span class="highlight">MOB</span></div>
+            <p class="text-secondary">&copy; 2026 FITMOB. All rights reserved.</p>
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <a href="#" class="text-secondary"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-secondary"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-secondary"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sign In Modal -->
+    <div id="signin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Welcome to FIT<span class="highlight">MOB</span></h2>
+            <p id="modal-subtitle">Sign in to access your personal dashboard.</p>
+
+            <form id="auth-form" class="auth-form">
+                <div class="mb-3 text-start">
+                    <input type="text" id="auth-username" class="form-control" placeholder="Username" required
+                        minlength="3">
+                </div>
+                <div class="mb-3 text-start">
+                    <input type="password" id="auth-password" class="form-control" placeholder="Password" required
+                        minlength="4">
+                </div>
+                <p id="auth-error" class="auth-error text-danger small"></p>
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary w-100">Sign In</button>
+            </form>
+
+            <div class="form-toggle text-center mt-3">
+                <span id="form-toggle-text" class="text-secondary">Don't have an account? <a href="#"
+                        id="toggle-auth-link" class="highlight">Create one</a></span>
+            </div>
+
+            <div class="my-3 text-secondary"><span>OR</span></div>
+            <button id="btn-guest" class="btn btn-secondary w-100">
+                <i class="fas fa-user-astronaut me-2"></i> Continue as Guest
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core JS for Auth & Nav -->
+    <script src="script.js?v=6"></script>
+
+    <!-- Optional: Add an intersection observer specific to this page for animations if script.js isn't catching them -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in-up');
+            const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+
+            const appearOnScroll = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.style.animationPlayState = 'running';
+                    // We let script.js handle the actual addition of classes, but if needed we could add an active class here
+                    observer.unobserve(entry.target);
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                fader.style.animationPlayState = 'paused'; // pause until observed
+                appearOnScroll.observe(fader);
+            });
+        });
+    </script>
+</body>
+
+</html>

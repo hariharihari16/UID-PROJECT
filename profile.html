@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITMOB | Profile Dashboard</title>
+    <script>
+        if (!localStorage.getItem('fitmob_user')) {
+            window.location.href = 'index.html?login=true';
+        }
+    </script>
+    <meta name="description" content="Your personal FITMOB profile and activity dashboard.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=6">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-page {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .profile-avatar {
+            font-size: 5rem;
+            color: var(--accent-neon);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            text-align: center;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .achievement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .achievement-item i {
+            font-size: 2rem;
+        }
+
+        .streak-icon { color: #f97316; }
+        .goal-icon { color: #22c55e; }
+
+        .achievement-item h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .achievement-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Weekly Review Chart */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chart-day-label {
+            width: 40px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .chart-bar-wrapper {
+            flex-grow: 1;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-neon) 0%, rgba(139, 92, 246, 1) 100%);
+            border-radius: 10px;
+            width: 0%; /* Default 0, updated by JS */
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .chart-value-label {
+            width: 50px;
+            text-align: right;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+
+<body class="profile-page">
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">FIT<span>MOB</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link dashboard-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mentor.html">Mentor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tools.html">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="plans.html">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="profile.html">Contact</a></li>
+                    <li class="nav-item ms-lg-3"><button id="nav-signin-btn" class="btn btn-secondary btn-sm rounded-pill px-4 py-2 mt-2 mt-lg-0">Sign In</button></li>
+                    <li class="nav-item ms-lg-2" id="nav-profile-item" style="display: none;">
+                        <a href="profile.html" class="nav-link active fs-4" title="My Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Profile Content -->
+    <main class="container py-5 mt-4">
+        <!-- Header -->
+        <header class="text-center mb-5 fade-in-up">
+            <h1 class="fw-bold mb-3 fs-1 mt-4">My <span class="highlight">Profile</span></h1>
+            <p class="text-secondary fs-5">Welcome back! Here's a snapshot of your journey.</p>
+        </header>
+
+        <!-- Dashboard Grid -->
+        <div class="row g-4">
+
+            <!-- Left Column: User Info -->
+            <div class="col-lg-4">
+                <section class="card profile-card border-0 p-4 mb-4 text-center">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h2 id="display-username" class="fs-4">Loading...</h2>
+                    <p class="profile-goal text-secondary mb-4">Goal: <span class="highlight fw-bold">Build Muscle</span></p>
+
+                    <div class="text-start mb-4 w-100 px-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold text-light">Level <span id="profile-level">1</span></span>
+                            <span class="small text-secondary" id="profile-xp-text">0 / 100 XP</span>
+                        </div>
+                        <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.1);">
+                            <div id="profile-xp-bar" class="progress-bar" role="progressbar" style="width: 0%; background-color: var(--accent-neon);"></div>
+                        </div>
+                    </div>
+
+                    <div class="profile-stats border-top border-secondary pt-4 mt-2">
+                        <div class="stat-item">
+                            <span class="stat-label d-block text-secondary small">Age</span>
+                            <span class="stat-value fw-bold fs-5" id="val-age">22</span>
+                            <input type="number" id="input-age" class="form-control form-control-sm mx-auto"
+                                style="display:none; text-align: center; max-width: 60px;" value="22">
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label d-block text-secondary small">Height</span>
+                            <span class="stat-value fw-bold fs-5" id="val-height">175cm</span>
+                            <input type="text" id="input-height" class="form-control form-control-sm mx-auto"
+                                style="display:none; text-align: center; max-width: 70px;" value="175cm">
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label d-block text-secondary small">Weight</span>
+                            <span class="stat-value fw-bold fs-5" id="val-weight">70kg</span>
+                            <input type="text" id="input-weight" class="form-control form-control-sm mx-auto"
+                                style="display:none; text-align: center; max-width: 70px;" value="70kg">
+                        </div>
+                    </div>
+                    <button id="edit-profile-btn" class="btn btn-secondary w-100 mt-4">Edit Profile</button>
+                </section>
+
+                <section class="card achievement-card border-0 p-4">
+                    <h3 class="fs-5 mb-4"><i class="fas fa-trophy text-warning me-2"></i> Achievements</h3>
+                    <div class="achievement-stats">
+                        <div class="achievement-item">
+                            <i class="fas fa-fire streak-icon"></i>
+                            <div>
+                                <h4 id="profile-streak-val">0 Days</h4>
+                                <p>Current Streak</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <i class="fas fa-check-circle goal-icon"></i>
+                            <div>
+                                <h4 id="profile-goals-val">0</h4>
+                                <p>Goals Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Weekly Review Chart -->
+            <div class="col-lg-8">
+                <section class="card weekly-review-card border-0 p-4 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <i class="fas fa-chart-bar fs-4 text-primary"></i>
+                        <h3 class="fs-4 m-0">Weekly Activity Review</h3>
+                    </div>
+                    <p class="text-secondary mb-4">This chart pulls data from your Dashboard to show total active hours logged per day.</p>
+                    
+                    <div class="chart-container" id="weekly-chart-container">
+                        <!-- Chart generated by JS -->
+                        <p class="text-secondary text-center my-5">Loading chart data...</p>
+                    </div>
+
+                    <div class="alert alert-dark mt-auto mb-0 border-secondary mt-5" style="background: rgba(255,255,255,0.02);">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        <strong>Tip:</strong> If you miss a day, that day is skipped. Stay consistent to build a strong weekly curve!
+                    </div>
+                </section>
+            </div>
+            </div>
+        </div>
+
+        <!-- Contact / Feedback Section -->
+        <section class="card feedback-card border-0 p-4 mt-5 fade-in-up" id="contact">
+            <h3 class="fs-4 mb-4"><i class="fas fa-envelope text-info me-2"></i> Contact & Feedback</h3>
+            <p class="text-secondary mb-4">Have questions or suggestions for FITMOB? Send us a message!</p>
+            
+            <form id="feedback-form" class="feedback-form">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6 form-group">
+                        <label for="feedback-name" class="form-label text-secondary small">Your Name</label>
+                        <input type="text" id="feedback-name" class="form-control" placeholder="John Doe" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="feedback-email" class="form-label text-secondary small">Email Address</label>
+                        <input type="email" id="feedback-email" class="form-control" placeholder="john@example.com" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="feedback-message" class="form-label text-secondary small">Message</label>
+                    <textarea id="feedback-message" class="form-control" placeholder="How can we improve FITMOB?" rows="4" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: white;"></textarea>
+                </div>
+                <p id="feedback-error" class="text-danger small" style="display: none;"></p>
+                <button type="submit" class="btn btn-primary px-4 py-2">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-5 border-top border-secondary">
+        <div class="container footer-content text-center py-4">
+            <div class="footer-logo fs-4 fw-bold">FIT<span class="text-primary">MOB</span></div>
+            <p class="text-secondary mt-2">&copy; 2026 FITMOB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Sign In Modal -->
+    <div id="signin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Welcome to FIT<span class="highlight">MOB</span></h2>
+            <p id="modal-subtitle">Sign in to access your personal dashboard.</p>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="mb-3">
+                    <input type="text" id="auth-username" class="form-control" placeholder="Username" required minlength="3">
+                </div>
+                <div class="mb-3">
+                    <input type="password" id="auth-password" class="form-control" placeholder="Password" required minlength="4">
+                </div>
+                <p id="auth-error" class="auth-error text-danger"></p>
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary w-100">Sign In</button>
+            </form>
+            
+            <div class="form-toggle text-center mt-3">
+                <span id="form-toggle-text" class="text-secondary">Don't have an account? <a href="#" id="toggle-auth-link" class="highlight">Create one</a></span>
+            </div>
+
+            <div class="modal-divider my-3"><span>OR</span></div>
+            <button id="btn-guest" class="btn btn-secondary w-100">
+                <i class="fas fa-user-astronaut me-2"></i> Continue as Guest
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js?v=5"></script>
+    <script src="profile.js?v=3"></script>
+</body>
+
+</html>
